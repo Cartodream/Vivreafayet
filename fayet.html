@@ -1,0 +1,131 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	
+
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="">
+  
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+	<script type="text/javascript" src="https://cdnnen.proxi.tools/res/global/js/leaflet/Leaflet.Control.Custom.js"></script>
+<style>
+
+
+.location-infobox {
+    background: #fff;
+    border-radius: 2px;
+    padding: 9px 11px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 12px;
+	text-align: left;
+    line-height: 16px;
+    color: #5B5B5B;
+    width: 100%;
+}
+.location-infobox .placecard__container {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+.location-infobox .placecard__business-name {
+    font-weight: bold;
+	text-align: left;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+</style>
+
+ 	
+<div id="map" style="width: 900px; height: 500px;"></div>
+<script src="sample-geojson.js" type="text/javascript"></script>
+
+<script>
+	let map = null;
+	let placecard = "\n                   <div class=\"placecard__left\">\n                <p class=\"placecard__business-name\">Découvrez notre commune<\/p>\n  <a class=\"placecard__direction-link\" target=\"_blank\" href=\"https:\/\/maps.google.com\/maps\/dir\/\/Mairie de Fayet-Ronaye , Fayet-Ronaye\">\n\n                   Itinéraire Google<br> <\/p>\n            ";
+  
+	let zoom = 14;
+	let mapType = false;
+        let scale = false;
+	   function initMap() {
+            
+                            
+                map = L.map('map', {
+                    center: [45.42549969777236, 3.5359921929261815],
+                    zoom: zoom,
+                    zoomControl: false,
+                    gestureHandling: true
+                });
+
+		
+	
+	var cities = L.layerGroup();
+	var test = L.layerGroup();
+
+	
+	var grayscale   = L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {attribution: '<a href="https://cartodream.wixsite.com/website-1">Cartodream</a> , <a href="https://www.openstreetmap.fr/">OSM</a>',
+	
+	}).addTo(map),
+		streets  = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {attribution: '<a href="https://cartodream.wixsite.com/website-1">Cartodream</a> , <a href="https://www.openstreetmap.fr/">OSM</a>Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+	
+	});
+	var baseLayers = {
+		"Plan": grayscale,
+		"Vue aérienne": streets
+	};
+	var overlays = {
+		"Point de service": cities,
+		"Monument religieux": test
+	};
+
+	L.control.layers(baseLayers,overlays).addTo(map);
+	L.marker([45.42350280236443, 3.533216092722862]).addTo(test)
+			.bindPopup("Cimetière")
+
+	L.marker([45.42387930008261, 3.5333858957387116]).addTo(cities)
+			.bindPopup("Garage Municipal")
+	L.marker([45.4265101930417, 3.5361250257422654]).addTo(cities)
+			.bindPopup("Salle Polyvalente")
+
+	L.marker([45.424728563371104, 3.5365679948388724]).addTo(test)
+			.bindPopup("Eglise de Fayet")	
+
+	L.marker([45.426212525697814, 3.535998553984414]).addTo(map)
+			.bindPopup("Mairie");
+
+	    if(scale) {
+                    L.control.scale({
+                        position: 'bottomright',
+                        imperial: false
+                    }).addTo(map);
+                }
+                L.control.zoom({
+                    position: 'bottomright',
+                }).addTo(map);
+                
+                                    
+                    L.control.custom({
+                        position: 'topleft',
+                        content: placecard,
+                        classes: 'location-infobox',
+                                                 
+                    }).addTo(map);
+                    
+                                        
+        }
+        
+
+                    window.onload = function(){
+                initMap();
+            };
+
+</script>
+
+
+</body>
+</html>
